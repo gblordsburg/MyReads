@@ -8,6 +8,7 @@ import './App.css'
 class BooksApp extends Component {
   state = {
     books : [],
+    searchedBooks: [],
     searchterms: ['Android', 'Art', 'Artificial Intelligence', 'Astronomy',
       'Austen', 'Baseball', 'Basketball', 'Bhagat', 'Biography', 'Brief',
       'Business', 'Camus', 'Cervantes', 'Christie', 'Classics', 'Comics',
@@ -47,6 +48,7 @@ class BooksApp extends Component {
 
         <Route exact path="/search" render={({ history }) => (
           <SearchBooks
+            searchterms={this.state.searchterms}
             onChangeShelf={(book, shelf) => {
               this.changeShelf(book, shelf)
               history.push('/')
