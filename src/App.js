@@ -8,6 +8,7 @@ import './App.css'
 class BooksApp extends Component {
   state = {
     books : [],
+    query: '',
     searchterms: ['Android', 'Art', 'Artificial Intelligence', 'Astronomy',
       'Austen', 'Baseball', 'Basketball', 'Bhagat', 'Biography', 'Brief',
       'Business', 'Camus', 'Cervantes', 'Christie', 'Classics', 'Comics',
@@ -21,7 +22,8 @@ class BooksApp extends Component {
        'Production', 'Programming', 'React', 'Redux', 'River', 'Robotics',
        'Rowling', 'Satire', 'Science Fiction', 'Shakespeare', 'Singh',
        'Swimming', 'Tale', 'Thrun', 'Time', 'Tolstoy', 'Travel', 'Ultimate',
-       'Virtual Reality', 'Web Development', 'iOS']
+       'Virtual Reality', 'Web Development', 'iOS'],
+    searchedBooks: []
   }
   componentDidMount() {
  	  BooksAPI.getAll().then((books) => {this.setState({ books: books })})
@@ -30,6 +32,23 @@ class BooksApp extends Component {
   changeShelf = (book, shelf) => {
     BooksAPI.update(book, shelf)
  	  BooksAPI.getAll().then((books) => {this.setState({ books: books })})
+  }
+
+  searchBooks = (query) => {
+    this.setState({ query: query.trim() })
+    BooksAPI.search(query, "20").then(books => {
+      this.setState(state => ({
+        searchedBooks: books
+      }))
+    })
+  }
+
+  updateQuery = (query) => {
+    this.setState({ query: query.trim() })
+  }
+
+  clearQuery = (query) => {
+    this.setState({query: ''})
   }
 
 
@@ -45,7 +64,18 @@ class BooksApp extends Component {
 
         <Route exact path="/search" render={({ history }) => (
           <SearchBooks
+            query={this.state.query}
+            onUpdateQuery={(query) => {
+              this.updateQuery(query)
+            }}
+            onClearQuery={(query) => {
+              this.clearQuery(query)
+            }}
             searchterms={this.state.searchterms}
+            onSearchBooks={(query) => {
+              this.searchBooks(query)
+            }}
+            searchedBooks={this.state.searchedBooks}
             onChangeShelf={(book, shelf) => {
               this.changeShelf(book, shelf)
               history.push('/')

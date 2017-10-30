@@ -1,41 +1,23 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import * as BooksAPI from './BooksAPI';
 import escapeRegExp from 'escape-string-regexp';
 import sortBy from 'sort-by';
 
 class SearchBooks extends Component {
   static propTypes = {
+    query: PropTypes.string,
     searchterms: PropTypes.array.isRequired,
-    onChangeShelf: PropTypes.func.isRequired
+    searchedBooks: PropTypes.array.isRequired,
+    onChangeShelf: PropTypes.func.isRequired,
+    onSearchBooks: PropTypes.func.isRequired,
+    onUpdateQuery: PropTypes.func.isRequired,
+    onClearQuery: PropTypes.func.isRequired
   }
 
-  state = {
-    query: '',
-    searchedBooks: []
-  }
-
-  searchBooks = (query) => {
-    this.setState({ query: query.trim() })
-    BooksAPI.search(query, "20").then(books => {
-      this.setState(state => ({
-        searchedBooks: books
-      }))
-    })
-  }
-
-  updateQuery = (query) => {
-    this.setState({ query: query.trim() })
-  }
-
-  clearQuery = (query) => {
-    this.setState({query: ''})
-  }
 
   render() {
-    const { searchterms, onChangeShelf } = this.props
-    const { query, searchedBooks } = this.state
+    const { query, searchterms, onChangeShelf, onSearchBooks, searchedBooks, onUpdateQuery, onClearQuery } = this.props
     let showingSearchTerms
     if (query) {
       const match = new RegExp(escapeRegExp(query), 'i')
@@ -67,11 +49,11 @@ class SearchBooks extends Component {
               type="text"
               placeholder="Search by title or author"
               value={query}
-              onChange={(e) => this.updateQuery(e.target.value)}
+              onChange={(e) => onUpdateQuery(e.target.value)}
               />
               {/*<input type="submit" className="search-books-submit-btn" value="Search"/>*/}
-            <button onClick={this.clearQuery}>Clear</button>
-            <select onChange={(e) => this.searchBooks(e.target.value)}>
+            <button onClick={onClearQuery}>Clear</button>
+            <select onChange={(e) => onSearchBooks(e.target.value)}>
             {showingSearchTerms.length !== 0 && (showingSearchTerms.map((searchterm) => (
               <option key={searchterm} className="search-term" value={searchterm}>{searchterm}</option>
             )))}
