@@ -8,7 +8,6 @@ import './App.css'
 class BooksApp extends Component {
   state = {
     books : [],
-    searchedBooks: [],
     searchterms: ['Android', 'Art', 'Artificial Intelligence', 'Astronomy',
       'Austen', 'Baseball', 'Basketball', 'Bhagat', 'Biography', 'Brief',
       'Business', 'Camus', 'Cervantes', 'Christie', 'Classics', 'Comics',
@@ -25,8 +24,6 @@ class BooksApp extends Component {
        'Virtual Reality', 'Web Development', 'iOS']
   }
   componentDidMount() {
-    BooksAPI.get("74XNzF_al3MC").then((book) => {console.log(book)})
-	  BooksAPI.getAll().then((books) => {console.log(books)})
  	  BooksAPI.getAll().then((books) => {this.setState({ books: books })})
 	}
 
