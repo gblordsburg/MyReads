@@ -30,8 +30,11 @@ class BooksApp extends Component {
 	}
 
   changeShelf = (book, shelf) => {
-    BooksAPI.update(book, shelf)
- 	  BooksAPI.getAll().then((books) => {this.setState({ books: books })})
+    BooksAPI.update(book, shelf).then(() => {
+      BooksAPI.getAll().then(books => {
+        this.setState({ books: books });
+      });
+    });
   }
 
   searchBooks = (query) => {
